@@ -6,7 +6,7 @@ This project attempts to run 3 concurrent Terraform processes to provision and d
 
 This repo comprises 3 Projects:
 ### Client
-(.NET Core 3.1 API). This is what we'll be deploying to the cloud - see **Getting Started** below
+(.NET Core 3.1 API). This is what we'll be deploying to the cloud - see **Set Up** below
 
 ### Listener
 (.NET Core Console app). We'll run 3 separet instances of this app that will listen for a trigger event on the same messgae queue, and upon being "triggered" will kick-off simultanetous provisioning activies (`terraform apply`) on each of the 3 clouds.
@@ -22,79 +22,82 @@ The listener project also contains the 3 main.tf files we'll use for each provid
 (.NET Core Console app). We use this to place a message on the RabbitMQ message bus, (this will trigger the Listeners - see #2).
 
 
-## Getting Started
+## Prerequisites
+In addition to the projects contained within this repo, there are some other pre-requisites / components you're going to need:
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+* Terraform [Download & Set Up](https://www.terraform.io/downloads.html)
+* Docker Desktop (to run RabbitMQ) [Download & Set Up](https://www.docker.com/products/docker-desktop)
+* .NET Core SDK 3.1 [Downlaod & Set Up](https://dotnet.microsoft.com/download)
+* Accounts on: AWS, Azure & GCP
+* Account on Docker Hub
+* *Reccommended*: Non-Interactrive Authentication Set Up for all Cloud Providers
+  * [AWS Instructions](https://www.terraform.io/docs/providers/aws/index.html)
+  * [Azure Instructions](https://www.terraform.io/docs/providers/azurerm/guides/service_principal_client_secret.html)
+  * [GCP Instructions](https://www.terraform.io/docs/providers/google/guides/getting_started.html)
 
-### Prerequisites
+## Set Up
 
-What things you need to install the software and how to install them
+### Run RabbitMQ in Docker
+We need a RabbitMQ instance running in Docker, enter the following command to set up:
 
-```
-Give examples
-```
+`docker run -d --hostname my-rabbit --name some-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:3-management`
 
-### Installing
+This will run RabbitMQ on localhost:5672, to test browse to localhost:15672 to view the Management Interface:
+* User ID: guest
+* Password: guest
 
-A step by step series of examples that tell you how to get a development env running
+### Build & Push Docker Image to Docker Hub
+At a command prompt "in" the Client project, build a Docker image of the project:
 
-Say what the step will be
+`docker build -t <Your Docker Hub ID>/<name of image> .`
 
-```
-Give the example
-```
+E.g.:
 
-And repeat
+`docker build -t binarythistle/amazingrace .`
 
-```
-until finished
-```
+Then push to Docker Hub:
 
-End with an example of getting some data out of the system or using it for a little demo
+`docker push <Your Docker Hub ID>/<name of image>`
 
-## Running the tests
+### Push Image to Google Cloud Container Registry
 
-Explain how to run the automated tests for this system
+Instructions can be found [here](https://cloud.google.com/container-registry/docs/pushing-and-pulling)
 
-### Break down into end to end tests
+### Update main.tf & service.json files
 
-Explain what these tests test and why
+As you will be using *your* Docker Image, you'll need to update the `main.tf` file, (or in the case of AWS the `service.json` file), to point to your images:
 
-```
-Give an example
-```
+* AWS: Update the `service.json` file to point to your image on **Docker Hub**
+* Azure: Update the `main.tf` file to point to your image on **Docker Hub**
+* GCP: Update the `main.tf` file to point to your image on **Google Cloud Container Repository**
 
-### And coding style tests
+### Run up 3 Listeners
 
-Explain what these tests test and why
+1. Open 3 separate command prompts, (PowerShell, CMD, Bash etc.)
+2. Navigate inside the Listener folder and type: `dotnet run`
+3. This should run up the listener, then type the provider you want to use
 
-```
-Give an example
-```
+**NOTE:** Select a different provider for each of the3 3 instances
 
-## Deployment
 
-Add additional notes about how to deploy this on a live system
+## Running the Example
+
+**IMPORTANT** The Set up steps above will have to have been performed before you pull the trigger
+
+1. Open another command prompt
+2. Navigate inside the "Trigger" folder and type: `dotnet run`
+3. Hit any key + `enter` to trigger the 3 listeners 
+
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [.NET Core SDK 3.1](https://dotnet.microsoft.com/download
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Les Jackson**
+* **Anthony Dong (Oxalide)** - AWS Fargate `main.tf` file - see Acknowledgements
 
 ## License
 
@@ -102,6 +105,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+The Amazon AWS component would not have been possible without the excellent example provided by Anthony Dong:
+* [Blog](https://blog.oxalide.io/post/aws-fargate/)
+* [GitHub](https://github.com/Oxalide/terraform-fargate-example)
