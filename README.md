@@ -6,17 +6,17 @@ This project attempts to run 3 concurrent Terraform processes to provision and d
 
 This repo comprises 3 Projects:
 ### Client
-(.NET Core 3.1 API). This is what we'll be deploying to the cloud - see set up instructions below
+(.NET Core 3.1 API). This is what we'll be deploying to the cloud - see **Getting Started** below
 
 ### Listener
 (.NET Core Console app). We'll run 3 separet instances of this app that will listen for a trigger event on the same messgae queue, and upon being "triggered" will kick-off simultanetous provisioning activies (`terraform apply`) on each of the 3 clouds.
 
 The listener project also contains the 3 main.tf files we'll use for each provider, they can be found at:
-* [/mainfiles/aws/main.tf] https://github.com/binarythistle/Terraform-Multi-Cloud/blob/master/Listener/mainfiles/aws/main.tf
-* [/mainfiles/azure/main.tf] https://github.com/binarythistle/Terraform-Multi-Cloud/blob/master/Listener/mainfiles/azure/main.tf
-* [/mainfiles/gcp/main.tf] https://github.com/binarythistle/Terraform-Multi-Cloud/blob/master/Listener/mainfiles/gcp/main.tf
+* [/mainfiles/aws/main.tf](https://github.com/binarythistle/Terraform-Multi-Cloud/blob/master/Listener/mainfiles/aws/main.tf)
+* [/mainfiles/azure/main.tf](https://github.com/binarythistle/Terraform-Multi-Cloud/blob/master/Listener/mainfiles/azure/main.tf)
+* [/mainfiles/gcp/main.tf](https://github.com/binarythistle/Terraform-Multi-Cloud/blob/master/Listener/mainfiles/gcp/main.tf)
 
-**Note:** The aws `main.tf` file additionally requires a container services json file: [service.json] https://github.com/binarythistle/Terraform-Multi-Cloud/blob/master/Listener/mainfiles/aws/service.json
+**Note:** The aws `main.tf` file additionally requires a container services json file: [service.json](https://github.com/binarythistle/Terraform-Multi-Cloud/blob/master/Listener/mainfiles/aws/service.json)
 
 ### Trigger
 (.NET Core Console app). We use this to place a message on the RabbitMQ message bus, (this will trigger the Listeners - see #2).
