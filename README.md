@@ -99,7 +99,7 @@ I reccommend that you destroy, (`terraform destroy`), the provisioned infrastruc
 
 ## Built With
 
-* [.NET Core SDK 3.1](https://dotnet.microsoft.com/download
+* [.NET Core SDK 3.1](https://dotnet.microsoft.com/download)
 
 
 ## Authors
