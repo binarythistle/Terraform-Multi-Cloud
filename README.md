@@ -19,15 +19,15 @@ The listener project also contains the 3 main.tf files we'll use for each provid
 **Note:** The aws `main.tf` file additionally requires a container services json file: [service.json](https://github.com/binarythistle/Terraform-Multi-Cloud/blob/master/Listener/mainfiles/aws/service.json)
 
 ### Trigger
-(.NET Core Console app). We use this to place a message on the RabbitMQ message bus, (this will trigger the Listeners - see #2).
+(.NET Core Console app). We use this to place a message on the RabbitMQ message bus, (this will trigger the Listeners - see **Listener** section above).
 
 
 ## Prerequisites
-In addition to the projects contained within this repo, there are some other pre-requisites / components you're going to need:
+In addition to the projects contained within this repo, there are some other prerequisites / components you're going to need:
 
 * Terraform [Download & Set Up](https://www.terraform.io/downloads.html)
 * Docker Desktop (to run RabbitMQ) [Download & Set Up](https://www.docker.com/products/docker-desktop)
-* .NET Core SDK 3.1 [Downlaod & Set Up](https://dotnet.microsoft.com/download)
+* .NET Core SDK 3.1 [Download & Set Up](https://dotnet.microsoft.com/download)
 * Accounts on: AWS, Azure & GCP
 * Account on Docker Hub
 * *Reccommended*: Non-Interactrive Authentication Set Up for all Cloud Providers
@@ -73,11 +73,11 @@ As you will be using *your* Docker Image, you'll need to update the `main.tf` fi
 
 ### Run up 3 Listeners
 
-1. Open 3 separate command prompts, (PowerShell, CMD, Bash etc.)
+1. Open 3 separate command prompts
 2. Navigate inside the Listener folder and type: `dotnet run`
 3. This should run up the listener, then type the provider you want to use
 
-**NOTE:** Select a different provider for each of the3 3 instances
+**NOTE:** Select a different provider for each of the 3 instances
 
 
 ## Running the Example
@@ -88,6 +88,14 @@ As you will be using *your* Docker Image, you'll need to update the `main.tf` fi
 2. Navigate inside the "Trigger" folder and type: `dotnet run`
 3. Hit any key + `enter` to trigger the 3 listeners 
 
+## Teardown
+
+I reccommend that you destroy, (`terraform destroy`), the provisioned infrastructure once you've played with the example. To do so, (for each of the 3 providers):
+
+1. At a comment prompt - navigate to where the `main.tf` file resides
+2. Type: `terraform destroy -auto-approve` to teardown the provisioned infrastructure
+
+**IMPORTANT** Do this for all 3 providers
 
 ## Built With
 
