@@ -1,0 +1,13 @@
+[
+    {
+      "name": "amazingrace",
+      "image": "binarythistle/raceclient8080",
+      "cpu": 10,
+      "memory": 512,
+      "portMappings": [
+        {
+          "containerPort": 8080
+        }
+      ]
+    }
+]
