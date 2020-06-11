@@ -99,10 +99,6 @@ As you will be using *your* Docker Image, you'll need to update the `main.tf` fi
 * **Les Jackson**
 * **Anthony Dong (Oxalide)** - AWS Fargate `main.tf` file - see Acknowledgements
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
 ## Acknowledgments
 
 The Amazon AWS component would not have been possible without the excellent example provided by Anthony Dong:
