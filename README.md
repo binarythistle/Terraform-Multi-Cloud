@@ -1,18 +1,20 @@
 # Multi-cloud with Terraform
 
-This project attempts to run 3 concurrent Terraform process to provision and deploy the same single container app to each of the 3 major cloud providers: Amazon Web Services, Google Cloud Platform & Microsoft Azure to see which is the fastest!
+This project attempts to run 3 concurrent Terraform process to provision and deploy the same single container app to each of the 3 major cloud providers: Amazon Web Services, Google Cloud Platform & Microsoft Azure to see which is the fastest! The high-level set up is shown below:
+
+![Solution Overview](/arch.jpg)
 
 This repo comprises 3 Projects:
-### CLient
+### Client
 (.NET Core 3.1 API). This is what we'll be deploying to the cloud - see set up instructions below
 
 ### Listener
 (.NET Core Console app). We'll run 3 separet instances of this app that will listen for a trigger event on the same messgae queue, and upon being "triggered" will kick-off simultanetous provisioning activies on each of the 3 clouds.
 
 The listener project also contains the 3 main.tf files we'll use for each provider, they can be found at:
-* ./mainfiles/aws/main.tf
-* ./mainfiles/azure/main.tf
-* ./mainfiles/gcp/main.tf
+* /mainfiles/aws/main.tf
+* /mainfiles/azure/main.tf
+* /mainfiles/gcp/main.tf
 
 ### Trigger
 (.NET Core Console app). We use this to place a message on the RabbitMQ message bus, (this will trigger the Listeners - see #2).
